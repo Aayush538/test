@@ -617,7 +617,7 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast ${type === 'error' ? 'error' : ''}`;
-  toast.innerHTML = `<span>${type === 'error' ? '⚠️' : '💗'}</span><span>${escapeHtml(message)}</span>`;
+  toast.innerHTML = `<span>${type === 'error' ? '⚠️' : }</span><span>${escapeHtml(message)}</span>`;
   container.appendChild(toast);
 
   setTimeout(() => {
