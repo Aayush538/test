@@ -690,45 +690,122 @@ h5 {
 
 .product-card {
   background: var(--white);
-  border: 1px solid rgba(247, 201, 216, 0.45);
-  border-radius: 16px;
+  border: 1.5px solid rgba(247, 201, 216, 0.45);
+  border-radius: 18px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(183, 110, 121, 0.06);
+  box-shadow: 0 4px 18px rgba(183, 110, 121, 0.07), 0 1px 3px rgba(0, 0, 0, 0.02);
+  position: relative;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(183, 110, 121, 0.15);
-  border-color: var(--pink-primary);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(183, 110, 121, 0.17), 0 4px 10px rgba(0, 0, 0, 0.04);
+  border-color: var(--rose-gold);
 }
 
 .product-card-img-wrap {
   width: 100%;
-  height: 185px;
-  background: #ffffff;
+  height: 215px;
+  background: radial-gradient(circle at 50% 45%, #ffffff 15%, #fdf6f8 65%, #faedf1 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
-  padding: 14px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(247, 201, 216, 0.22);
+  border-bottom: 1px solid rgba(247, 201, 216, 0.3);
+  box-shadow: inset 0 0 18px rgba(183, 110, 121, 0.05);
 }
 
-.product-card-img-wrap img {
+/* Studio ambient sheen overlay */
+.product-card-img-wrap::after,
+.product-image-carousel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%, rgba(58, 46, 46, 0.04) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Real photos (JPEG): edge-to-edge cover framing with studio contrast & color pop */
+.product-card-img-wrap img,
+.product-image-track img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  transition: transform 0.35s ease;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.05));
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.04) saturate(1.08) brightness(1.02);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
 }
 
-.product-card:hover .product-card-img-wrap img {
-  transform: scale(1.06);
+.product-card:hover .product-card-img-wrap img,
+.product-card:hover .product-image-track img {
+  transform: scale(1.07);
+  filter: contrast(1.07) saturate(1.14) brightness(1.04);
+}
+
+/* Packshots / Cutouts (PNG): gentle padding on studio pedestal with soft shadow */
+.product-card-img-wrap img[src$=".png"],
+.product-image-track img[src$=".png"] {
+  object-fit: contain;
+  padding: 16px 20px;
+  filter: drop-shadow(0 8px 18px rgba(183, 110, 121, 0.13)) contrast(1.03) brightness(1.01);
+}
+
+.product-card:hover .product-card-img-wrap img[src$=".png"],
+.product-card:hover .product-image-track img[src$=".png"] {
+  transform: scale(1.08) translateY(-2px);
+  filter: drop-shadow(0 14px 26px rgba(183, 110, 121, 0.22)) contrast(1.05) brightness(1.03);
+}
+
+/* Quick View floating pill on image hover */
+.product-zoom-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(35, 25, 30, 0.75);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-card:hover .product-zoom-hint {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Multiple images counter badge */
+.product-gallery-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  color: var(--espresso);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(183, 110, 121, 0.15);
+  border: 1px solid rgba(247, 201, 216, 0.7);
+  z-index: 3;
+  pointer-events: none;
 }
 
 .product-card-img-wrap .placeholder-label {
@@ -743,10 +820,12 @@ h5 {
 .product-image-carousel {
   position: relative;
   width: 100%;
-  height: 185px;
+  height: 215px;
+  background: radial-gradient(circle at 50% 45%, #ffffff 15%, #fdf6f8 65%, #faedf1 100%);
   display: flex;
   overflow: hidden;
-  border-bottom: 1px solid rgba(247, 201, 216, 0.22);
+  border-bottom: 1px solid rgba(247, 201, 216, 0.3);
+  box-shadow: inset 0 0 18px rgba(183, 110, 121, 0.05);
 }
 
 .product-image-track {
@@ -764,44 +843,43 @@ h5 {
 }
 
 .product-image-track img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
   flex: 0 0 100%;
   scroll-snap-align: center;
-  padding: 14px;
   cursor: pointer;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.05));
-  transition: transform 0.35s ease;
 }
 
-.product-image-carousel:hover .product-image-track img {
-  transform: scale(1.06);
-}
-
+/* Glassmorphic Carousel Navigation Arrows */
 .product-image-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
-  border: 2px dotted var(--rose-gold);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(247, 201, 216, 0.8);
   color: var(--rose-gold);
-  font-size: 1rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 2;
-  transition: all var(--transition);
+  z-index: 4;
+  box-shadow: 0 3px 10px rgba(183, 110, 121, 0.18);
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.product-card:hover .product-image-nav {
+  opacity: 1;
 }
 
 .product-image-nav:hover {
   background: var(--rose-gold);
   color: var(--white);
-  border-color: var(--white);
+  border-color: var(--rose-gold);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .product-image-nav.prev {
@@ -978,6 +1056,97 @@ h5 {
 .delivery-item-text p {
   font-size: 0.88rem;
   color: var(--espresso-light);
+}
+
+.delivery-charge-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--pink-softer);
+  color: var(--rose-gold);
+  border: 1px solid var(--pink-primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.delivery-methods-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .delivery-methods-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.delivery-method-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 2px solid rgba(247, 201, 216, 0.6);
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.delivery-method-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.delivery-method-card:hover {
+  border-color: var(--rose-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(183, 110, 121, 0.1);
+}
+
+.delivery-method-card.selected {
+  border-color: var(--rose-gold);
+  background: var(--white);
+  box-shadow: 0 4px 14px rgba(183, 110, 121, 0.15);
+}
+
+.delivery-method-content {
+  width: 100%;
+}
+
+.delivery-method-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.delivery-method-icon {
+  font-size: 1.2rem;
+}
+
+.delivery-method-title {
+  font-size: 0.95rem;
+  color: var(--espresso);
+  font-weight: 600;
+}
+
+.delivery-method-price {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--rose-gold);
+}
+
+.delivery-method-desc {
+  font-size: 0.8rem;
+  color: var(--espresso-light);
+  margin: 0;
 }
 
 /* ============================================================
@@ -2073,30 +2242,39 @@ h5 {
   /* ── Gift Menu — compact 2-column cards ── */
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 12px;
   }
 
-  .product-card-img-wrap {
-    height: 110px;
-    padding: 6px;
+  .product-card {
+    border-radius: 14px;
+  }
+
+  .product-card-img-wrap,
+  .product-image-carousel {
+    height: clamp(140px, 40vw, 175px);
+  }
+
+  .product-card-img-wrap img[src$=".png"],
+  .product-image-track img[src$=".png"] {
+    padding: 10px 12px;
   }
 
   .product-card-body {
-    padding: 8px 10px 10px;
+    padding: 10px 10px 12px;
   }
 
   .product-card-name {
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     margin-bottom: 2px;
   }
 
   .product-card-subtitle {
-    font-size: 0.62rem;
-    padding: 1px 5px;
+    font-size: 0.65rem;
+    padding: 1px 6px;
   }
 
   .product-card-desc {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     margin-bottom: 6px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -2105,7 +2283,7 @@ h5 {
   }
 
   .product-card-price {
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     margin-bottom: 6px;
   }
 
@@ -2132,44 +2310,67 @@ h5 {
     display: inline;
   }
 
-  /* ── Occasion Specials — same compact 2-column treatment ── */
+  /* ── Occasion Specials — full-width responsive layout for all mobile screens ── */
   .occasion-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 16px;
+    padding: 0 4px;
+  }
+
+  .occasion-card {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(183, 110, 121, 0.12);
   }
 
   .occasion-card-img {
-    height: 120px;
+    height: clamp(210px, 58vw, 290px);
   }
 
   .occasion-card-badge {
-    padding: 4px 10px;
-    font-size: 0.55rem;
-    top: 8px;
-    left: 8px;
+    padding: 6px 14px;
+    font-size: 0.68rem;
+    top: 12px;
+    left: 12px;
   }
 
   .occasion-card-body {
-    padding: 12px 14px 14px;
+    padding: 18px 20px 22px;
+    text-align: center;
   }
 
   .occasion-card-name {
-    font-size: 0.85rem;
-    margin-bottom: 3px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
   }
 
   .occasion-card-desc {
-    font-size: 0.72rem;
-    margin-bottom: 10px;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .occasion-card .btn {
-    padding: 8px 12px;
-    font-size: 0.75rem;
+  .occasion-card-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .occasion-card-actions .btn {
+    flex: 1;
+    padding: 11px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    justify-content: center;
   }
 
   /* ── Gift Meanings — compact 2-column ── */
@@ -2280,11 +2481,12 @@ h5 {
   }
 
   .products-grid {
-    gap: 6px;
+    gap: 8px;
   }
 
-  .product-card-img-wrap {
-    height: 90px;
+  .product-card-img-wrap,
+  .product-image-carousel {
+    height: 135px;
   }
 
   .booking-callout {
@@ -2725,3 +2927,398 @@ h5 {
   cursor: pointer;
   padding: 4px 8px;
 }
+
+/* ──────────────────────────────────────────────────────────────
+   PERSONAL MESSAGE REQUIREMENT & FIXED RECEIVER COUNTRY STYLES
+   ────────────────────────────────────────────────────────────── */
+.form-control-readonly {
+  background-color: #fbf7f8 !important;
+  color: var(--espresso) !important;
+  font-weight: 600 !important;
+  cursor: default !important;
+  border-color: #eedde2 !important;
+}
+
+.personal-msg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.personal-msg-header label {
+  margin-bottom: 0 !important;
+}
+
+.personal-message-notice {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  line-height: 1.35;
+}
+
+.personal-message-notice.locked {
+  background: #fff3f5;
+  color: #a84255;
+  border: 1px solid #f6ccd6;
+}
+
+.personal-message-notice.unlocked {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.personal-message-notice .notice-icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.btn-quick-add-jar {
+  background: #b76e79;
+  color: #ffffff;
+  border: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-quick-add-jar:hover {
+  background: #9c5560;
+  transform: translateY(-1px);
+}
+
+#order-message:disabled {
+  background-color: #fdfafd;
+  cursor: not-allowed;
+  opacity: 0.75;
+  border-style: dashed;
+  border-color: #eed6de;
+}
+
+.occasion-card-price-tag {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--rose-gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.occasion-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.occasion-card-img {
+  cursor: zoom-in;
+}
+
+#lightbox {
+  z-index: 3500 !important;
+}
+
+.modal-close-btn:hover {
+  background: var(--pink-primary) !important;
+  color: var(--white) !important;
+  transform: scale(1.05);
+}
+
+.btn-quick-remove-jar {
+  background: #fdf2f4;
+  color: #a84255;
+  border: 1px solid #f5c2c7;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-quick-remove-jar:hover {
+  background: #a84255;
+  color: #ffffff;
+  border-color: #a84255;
+  transform: translateY(-1px);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LUXURY PAYMENT QR CARD STYLING (Single Clean Container)
+   ────────────────────────────────────────────────────────────── */
+.luxury-qr-container {
+  max-width: 320px;
+  width: 100%;
+  margin: 28px auto 28px;
+}
+
+.luxury-qr-card {
+  background: var(--white);
+  border: 1.5px solid #f0d4dc;
+  border-radius: 22px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 8px 32px rgba(183, 110, 121, 0.10), 0 2px 8px rgba(0,0,0,0.04);
+  text-align: center;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.luxury-qr-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--rose-gold), #f7c9d8, var(--rose-gold));
+  border-radius: 22px 22px 0 0;
+}
+
+.luxury-qr-card:hover {
+  box-shadow: 0 12px 40px rgba(183, 110, 121, 0.16), 0 4px 12px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+}
+
+.luxury-qr-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--espresso);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.luxury-qr-title + p {
+  font-size: 0.78rem;
+  color: var(--espresso-light);
+  margin: 0 0 16px;
+}
+
+.luxury-qr-frame {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-in;
+  background: #fff;
+  border: 2px solid #f3e4ea;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: inset 0 1px 4px rgba(183, 110, 121, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.luxury-qr-frame:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(183, 110, 121, 0.12), inset 0 1px 4px rgba(183, 110, 121, 0.06);
+}
+
+.luxury-qr-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+}
+
+.luxury-qr-zoom-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(40, 30, 30, 0.72);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.luxury-qr-frame:hover .luxury-qr-zoom-hint {
+  opacity: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   REAL BOUQUET → EXPRESS DELIVERY NOTE
+   ────────────────────────────────────────────────────────────── */
+.real-bouquet-delivery-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fff5f8, #fef0f4);
+  border: 1.5px solid rgba(247, 170, 195, 0.45);
+  border-left: 3.5px solid var(--rose-gold);
+  border-radius: 12px;
+  animation: noteFadeIn 0.4s ease;
+}
+
+.real-bouquet-delivery-note .note-icon {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.real-bouquet-delivery-note .note-text {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--espresso);
+  font-weight: 500;
+}
+
+@keyframes noteFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Disabled Normal Delivery card when Real Bouquet is in cart */
+.delivery-method-card.disabled-delivery {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+  border-color: rgba(200, 200, 200, 0.5);
+  background: rgba(240, 238, 236, 0.5);
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PREFERRED DELIVERY DATE STYLING
+   ────────────────────────────────────────────────────────────── */
+.date-form-group {
+  position: relative;
+}
+
+.date-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+#order-date {
+  width: 100%;
+  height: 48px;
+  padding: 12px 50px 12px 16px;
+  background: var(--white);
+  border: 1.5px solid rgba(247, 201, 216, 0.75);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--espresso);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(183, 110, 121, 0.05);
+  transition: all 0.25s ease;
+  position: relative;
+  outline: none;
+}
+
+#order-date:hover {
+  border-color: var(--rose-gold);
+  background: #fffdfd;
+  box-shadow: 0 4px 12px rgba(183, 110, 121, 0.1);
+}
+
+#order-date:focus {
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.15), 0 4px 14px rgba(183, 110, 121, 0.08);
+  background: var(--white);
+}
+
+/* Custom Rose-Gold Calendar Icon */
+.date-calendar-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rose-gold);
+  background: rgba(247, 201, 216, 0.35);
+  border-radius: 8px;
+  pointer-events: none;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.date-input-container:hover .date-calendar-btn,
+#order-date:focus ~ .date-calendar-btn {
+  background: var(--rose-gold);
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.06);
+}
+
+/* Make entire date input clickable to open native date picker in webkit/blink */
+#order-date::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.date-hint {
+  font-size: 0.78rem;
+  color: var(--espresso-light);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.4;
+}
+
+.form-group.has-error #order-date {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1) !important;
+}
+
+@media (max-width: 400px) {
+  .occasion-card-img {
+    height: 195px;
+  }
+  .occasion-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .occasion-card-actions .btn {
+    width: 100%;
+  }
+}
+
+
+
+
