@@ -1760,7 +1760,7 @@ h5 {
   align-items: center;
 }
 
-/* Success message */
+/* Success message (base / error fallback) */
 .payment-success {
   display: none;
   text-align: center;
@@ -1798,6 +1798,266 @@ h5 {
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   ORDER SUCCESS CONFIRMATION REDESIGN (Scoped to Success Screen)
+   ────────────────────────────────────────────────────────────── */
+.payment-success.order-success-screen {
+  padding: 8px 0;
+  max-width: 620px;
+  margin: 0 auto;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  animation: successFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes successFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Brand Hero Badge (Heart + Flight Trail + Airplane) */
+.success-hero-badge {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--pink-softer), var(--pink-light));
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(183, 110, 121, 0.18), inset 0 0 0 2px rgba(255, 255, 255, 0.85);
+  position: relative;
+  animation: heroFloat 3s ease-in-out infinite alternate;
+}
+
+@keyframes heroFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+.success-hero-badge svg {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+
+.order-success-screen h3.success-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  color: var(--espresso);
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.order-success-screen .success-subtitle {
+  font-size: 0.94rem;
+  color: var(--espresso-light);
+  margin-bottom: 20px;
+  line-height: 1.65;
+}
+
+/* Mini Order Content Summary Pill */
+.success-order-summary-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--cream-warm);
+  border: 1px solid rgba(247, 201, 216, 0.7);
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--espresso);
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(183, 110, 121, 0.06);
+}
+
+.success-order-summary-pill svg {
+  color: var(--rose-gold);
+  flex-shrink: 0;
+}
+
+/* Tracking Code Box - Sleek and Clean */
+.success-tracking-card {
+  background: var(--pink-softer);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 1px dashed rgba(183, 110, 121, 0.35);
+}
+
+.success-tracking-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--espresso-light);
+}
+
+.success-tracking-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  padding: 6px 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(92, 61, 61, 0.06);
+  border: 1px solid rgba(247, 201, 216, 0.5);
+}
+
+.success-tracking-code {
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--espresso);
+  letter-spacing: 0.05em;
+}
+
+.success-copy-btn {
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  color: var(--rose-gold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.success-copy-btn:hover {
+  color: var(--espresso);
+  background: var(--pink-softer);
+}
+
+.success-tracking-help {
+  font-size: 0.82rem;
+  color: var(--espresso-light);
+  margin: 0 !important;
+}
+
+/* Invoice Action Box - High Visual Weight */
+.invoice-ready-box {
+  background: linear-gradient(135deg, rgba(254, 240, 245, 0.95), rgba(255, 249, 245, 0.98));
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  border: 1.5px solid var(--rose-gold-light);
+  box-shadow: 0 8px 24px rgba(183, 110, 121, 0.16);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.invoice-ready-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--espresso);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.invoice-ready-header svg {
+  color: var(--rose-gold);
+  flex-shrink: 0;
+}
+
+.invoice-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--rose-gold), var(--espresso));
+  color: var(--white) !important;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 50px;
+  box-shadow: 0 4px 14px rgba(183, 110, 121, 0.28);
+  transition: all var(--transition);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.invoice-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(183, 110, 121, 0.38);
+  color: var(--white);
+}
+
+.order-success-screen .success-contact-note {
+  font-size: 0.86rem;
+  color: var(--espresso-light);
+  margin-bottom: 14px;
+}
+
+.order-success-screen .fallback-links {
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.order-success-screen .btn-whatsapp,
+.order-success-screen .btn-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  padding: 10px 22px;
+}
+
+.order-success-screen .btn-email {
+  background: var(--white);
+  color: var(--rose-gold);
+  border: 1.5px solid var(--rose-gold);
+}
+
+.order-success-screen .btn-email:hover {
+  background: var(--rose-gold);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 576px) {
+  .payment-success.order-success-screen {
+    padding: 4px 0;
+  }
+  .invoice-ready-box {
+    padding: 18px 16px;
+  }
+  .order-success-screen .fallback-links {
+    flex-direction: column;
+    width: 100%;
+  }
+  .order-success-screen .fallback-links .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ============================================================
@@ -3074,7 +3334,7 @@ h5 {
   border: 1.5px solid #f0d4dc;
   border-radius: 22px;
   padding: 28px 24px 24px;
-  box-shadow: 0 8px 32px rgba(183, 110, 121, 0.10), 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 8px 32px rgba(183, 110, 121, 0.10), 0 2px 8px rgba(0, 0, 0, 0.04);
   text-align: center;
   position: relative;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -3084,14 +3344,16 @@ h5 {
 .luxury-qr-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--rose-gold), #f7c9d8, var(--rose-gold));
   border-radius: 22px 22px 0 0;
 }
 
 .luxury-qr-card:hover {
-  box-shadow: 0 12px 40px rgba(183, 110, 121, 0.16), 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 12px 40px rgba(183, 110, 121, 0.16), 0 4px 12px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px);
 }
 
@@ -3104,7 +3366,7 @@ h5 {
   letter-spacing: 0.3px;
 }
 
-.luxury-qr-title + p {
+.luxury-qr-title+p {
   font-size: 0.78rem;
   color: var(--espresso-light);
   margin: 0 0 16px;
@@ -3192,8 +3454,15 @@ h5 {
 }
 
 @keyframes noteFadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Disabled Normal Delivery card when Real Bouquet is in cart */
@@ -3272,7 +3541,7 @@ h5 {
 }
 
 .date-input-container:hover .date-calendar-btn,
-#order-date:focus ~ .date-calendar-btn {
+#order-date:focus~.date-calendar-btn {
   background: var(--rose-gold);
   color: #ffffff;
   transform: translateY(-50%) scale(1.06);
@@ -3310,15 +3579,13 @@ h5 {
   .occasion-card-img {
     height: 195px;
   }
+
   .occasion-card-actions {
     flex-direction: column;
     gap: 8px;
   }
+
   .occasion-card-actions .btn {
     width: 100%;
   }
 }
-
-
-
-

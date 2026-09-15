@@ -14,14 +14,14 @@
 // This is a Google Apps Script Web App. It handles orders,
 // enquiries, feedback/reviews, and tracking lookups.
 // ──────────────────────────────────────────────────────────────
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycby3ygdEbVFiltOsk7BgM0PHyNIV405t4-FBgTmKLSvcclNKUFByeV3pV4qYv3jKHTNNUg/exec';
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbz08kasjwz0WtW63ak0dU-r0ySUE4hHmOd3MQNM6SJR06jHGcSRZXn_YrtXKUEJGUTYKw/exec';
 
 // ──────────────────────────────────────────────────────────────
 // CONTACT INFO — Replace placeholder phone/links with your real ones
 
 // ──────────────────────────────────────────────────────────────
 const CONTACT = {
-  whatsappNumber: '614XXXXXXXX',       // EDIT: Your WhatsApp number (with country code, no + or spaces)
+  whatsappNumber: '9779851414905',     // Your WhatsApp business number
   email: 'giftbykrivya@gmail.com',     // EDIT: Your email address
   instagram: 'giftbykrivya',           // EDIT: Your Instagram handle (without @)
   googleReviewUrl: 'https://g.page/r/YOUR_GOOGLE_REVIEW_LINK/review',  // EDIT: Your Google Review URL
@@ -1869,6 +1869,22 @@ function refreshOrderSummary(keepScroll = true) {
     ? cart.map(i => `${i.name} (x${i.qty})`).join(', ')
     : 'No items in cart';
 
+  // Structured, itemized cart data — used by the invoice generator so each
+  // row on the PDF has real name / unit price / qty / amount, matching the
+  // sample invoice layout (Description | Unit Cost | Qty | Amount).
+  const cartItemsDetailed = cart.map(i => {
+    const qty = i.qty || 1;
+    const unitPrice = currentCurrency === 'NPR'
+      ? getNprPrice(i.priceAUD, i.priceNPR)
+      : (i.priceAUD || 0);
+    return {
+      name: i.name,
+      qty,
+      unitPrice,
+      amount: +(unitPrice * qty).toFixed(2),
+    };
+  });
+
   const speed = getSelectedDeliverySpeed();
   const shippingMethodObj = SHIPPING_CONFIG[speed] || SHIPPING_CONFIG.normal;
   const shippingCostFormatted = formatShippingPrice(speed);
@@ -1927,9 +1943,14 @@ function refreshOrderSummary(keepScroll = true) {
     ...data,
     parcelId,
     packageItems: cartStr,
+    cartItemsDetailed,
     shippingMethod: `${shippingMethodObj.name} (${shippingMethodObj.time})`,
     shippingCharge: shippingCostFormatted,
+    shippingChargeAmount: shippingAud,
+    shippingChargeAmountNpr: shippingNpr,
     itemsSubtotal: formatPrice(itemsAud, itemsNpr),
+    itemsSubtotalAmount: itemsAud,
+    itemsSubtotalAmountNpr: itemsNpr,
     currency,
     orderTotal,
     advancePaid,
@@ -2192,8 +2213,11 @@ function submitPayment() {
     landmark: sanitizeText(data.landmark, 255),
     mapsLink: isSafeUrl(data.mapsLink) ? data.mapsLink : '',
     packageItems: sanitizeText(data.packageItems, 500),
+    cartItemsDetailed: JSON.stringify(data.cartItemsDetailed || []),
     shippingMethod: sanitizeText(data.shippingMethod, 100),
     shippingCharge: sanitizeText(data.shippingCharge, 50),
+    shippingChargeAmount: data.shippingChargeAmount,
+    itemsSubtotalAmount: data.itemsSubtotalAmount,
     additionalItems: sanitizeText(data.additionalItems, 255),
     personalMessage: sanitizeText(data.personalMessage, 1000),
     customizationDetails: sanitizeText(data.customizationDetails, 1000),
@@ -2219,8 +2243,9 @@ function submitPayment() {
   })
     .then(res => res.json())
     .then(result => {
+      console.log('Order submit response:', result);
       if (result && result.success) {
-        renderSuccessScreen(data, paymentRef);
+        renderSuccessScreen(data, paymentRef, result.invoiceUrl);
         sessionStorage.removeItem('giftCart');
         sessionStorage.removeItem(ORDER_FORM_STORAGE_KEY);
         cart = [];
@@ -2240,49 +2265,169 @@ function submitPayment() {
     });
 }
 
-function renderSuccessScreen(data, paymentRef) {
+function renderSuccessScreen(data, paymentRef, invoiceUrl) {
   const summaryContent = document.getElementById('summary-content');
+
+  // Compute item count and summary string
+  let itemCount = 0;
+  if (Array.isArray(data.cartItemsDetailed) && data.cartItemsDetailed.length > 0) {
+    itemCount = data.cartItemsDetailed.reduce((sum, i) => sum + (Number(i.qty) || 1), 0);
+  } else if (typeof data.cartItemsDetailed === 'string') {
+    try {
+      const parsed = JSON.parse(data.cartItemsDetailed);
+      if (Array.isArray(parsed)) {
+        itemCount = parsed.reduce((sum, i) => sum + (Number(i.qty) || 1), 0);
+      }
+    } catch (e) { }
+  }
+
+  if (!itemCount && data.packageItems && data.packageItems !== 'No items in cart') {
+    const items = data.packageItems.split(',');
+    itemCount = items.length;
+  }
+  if (!itemCount) itemCount = 1;
+
+  const itemsLabel = itemCount === 1 ? '1 item' : `${itemCount} items`;
+
+  // Determine formatted order total
+  let totalFormatted = window._orderPriceText;
+  if (!totalFormatted) {
+    if (data.currency === 'NPR') {
+      totalFormatted = `NPR ${Number(data.orderTotal || 0).toLocaleString('en-IN')}`;
+    } else {
+      totalFormatted = `AUD $${Number(data.orderTotal || 0).toFixed(2)}`;
+    }
+  }
+
+  const invoiceBlock = invoiceUrl
+    ? `
+      <div class="invoice-ready-box">
+        <div class="invoice-ready-header">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Your official invoice is ready</span>
+        </div>
+        <a href="${escapeHtml(invoiceUrl)}" target="_blank" rel="noopener noreferrer" class="invoice-download-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download Invoice (PDF)
+        </a>
+      </div>`
+    : '';
 
   // WhatsApp Link Fallback
   const waMessage = encodeURIComponent(
     `🎁 *New Order Received*\n\n` +
     `📦 *Parcel ID:* ${data.parcelId}\n` +
     `🚚 *Delivery:* ${data.shippingMethod || 'Normal Delivery'} (${data.shippingCharge || ''})\n` +
-    `💰 *Order Total:* ${window._orderPriceText}\n` +
+    `💰 *Order Total:* ${totalFormatted}\n` +
     `🧾 *Payment Ref:* ${paymentRef}`
   );
 
   // Mailto fallback
   const mailSubject = encodeURIComponent(`New Order: ${data.parcelId}`);
   const mailBody = encodeURIComponent(
-    `Parcel ID: ${data.parcelId}\nOrder Total: ${window._orderPriceText}\nPayment Ref: ${paymentRef}`
+    `Parcel ID: ${data.parcelId}\nOrder Total: ${totalFormatted}\nPayment Ref: ${paymentRef}`
   );
 
   summaryContent.innerHTML = `
-    <div class="payment-success visible">
-      <div class="success-icon">💗</div>
-      <h3 style="margin-bottom:12px;">Thank you for ordering!</h3>
-      <p style="margin-bottom:12px; font-weight:bold; color:var(--espresso);">
-        Your tracking code: <span style="font-size:1.2rem; display:inline-block; margin-left:8px; padding:4px 8px; background:var(--pink-softer); border:1px solid var(--rose-gold); border-radius:4px;">${escapeHtml(data.parcelId)}</span>
-      </p>
-      <p style="margin-bottom:20px;">
-        Your order will be dispatched as soon as possible. The invoice will be sent with your parcel — you'll receive a digital invoice within 24 hours. Save this code to check your order status anytime in the Track Order section.
-      </p>
-      
-      <p style="font-size:0.85rem; color:var(--espresso-light); margin-bottom:10px;">
+    <div class="payment-success visible order-success-screen">
+      <!-- Brand Hero Emblem (Heart + Plane / Love Across Miles) -->
+      <div class="success-hero-badge" aria-hidden="true">
+        <svg viewBox="0 0 54 54" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="27" cy="27" r="24" fill="url(#hero-bg-grad)" opacity="0.35"/>
+          <path d="M12 36 C 14 20, 26 14, 38 18" stroke="var(--gold)" stroke-width="1.75" stroke-dasharray="2.5 2.5" stroke-linecap="round" opacity="0.85"/>
+          <path d="M27 38.5 C27 38.5 16 31.5 16 23 C16 18.5 19.5 15.5 23.5 15.5 C25.8 15.5 27 17 27 17 C27 17 28.2 15.5 30.5 15.5 C34.5 15.5 38 18.5 38 23 C38 31.5 27 38.5 27 38.5 Z" fill="url(#hero-heart-grad)" filter="drop-shadow(0 2px 5px rgba(183,110,121,0.25))"/>
+          <g transform="translate(35, 14) rotate(22) scale(0.65)">
+            <path d="M2 14 L22 2 L14 22 L11 15 L2 14 Z" fill="#ffffff" stroke="var(--rose-gold)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M22 2 L11 15" stroke="var(--rose-gold)" stroke-width="1.5" stroke-linejoin="round"/>
+          </g>
+          <path d="M14 16 L15 13 L18 12 L15 11 L14 8 L13 11 L10 12 L13 13 Z" fill="var(--gold)" opacity="0.9"/>
+          <path d="M41 33 L41.7 31 L44 30.3 L41.7 29.6 L41 27.5 L40.3 29.6 L38 30.3 L40.3 31 Z" fill="var(--rose-gold-light)" opacity="0.8"/>
+          <defs>
+            <linearGradient id="hero-bg-grad" x1="0" y1="0" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+              <stop stop-color="var(--rose-gold-light)"/>
+              <stop offset="1" stop-color="var(--gold)"/>
+            </linearGradient>
+            <linearGradient id="hero-heart-grad" x1="16" y1="15" x2="38" y2="39" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#E88B97"/>
+              <stop offset="1" stop-color="var(--rose-gold)"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h3 class="success-title">Thank you for ordering!</h3>
+      <p class="success-subtitle">Your order has been received and will be prepared with care.</p>
+
+      <!-- Tracking Code Card -->
+      <div class="success-tracking-card">
+        <span class="success-tracking-label">Tracking Code</span>
+        <div class="success-tracking-badge">
+          <span class="success-tracking-code">${escapeHtml(data.parcelId)}</span>
+          <button type="button" class="success-copy-btn" title="Copy tracking code" onclick="copySuccessTracking('${escapeHtml(data.parcelId)}', this)" aria-label="Copy tracking code">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+          </button>
+        </div>
+        <p class="success-tracking-help">
+          Save this code to check your order status anytime in the Track Order section.
+        </p>
+      </div>
+
+      <!-- Primary Action: Invoice Download (if available) -->
+      ${invoiceBlock}
+
+      <!-- Direct Assistance / Confirmation Links -->
+      <p class="success-contact-note">
         We also suggest sending us a quick note so we don't miss it:
       </p>
       <div class="fallback-links">
-        <a href="https://wa.me/${CONTACT.whatsappNumber}?text=${waMessage}" target="_blank" class="btn btn-whatsapp">
-          💬 Message Us on WhatsApp
+        <a href="https://wa.me/${CONTACT.whatsappNumber}?text=${waMessage}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="flex-shrink:0;">
+            <path d="M17.472 14.382c-.301-.15-1.78-.879-2.056-.98-.275-.1-.475-.15-.675.15-.2.301-.776.98-.951 1.18-.175.201-.351.226-.652.076-.301-.15-1.27-.468-2.42-1.493-.895-.798-1.5-1.784-1.675-2.085-.175-.301-.019-.464.132-.614.136-.134.301-.35.452-.525.15-.176.2-.301.3-.502.1-.201.05-.376-.025-.526-.075-.15-.675-1.63-.925-2.23-.244-.585-.492-.506-.675-.515-.175-.008-.375-.01-.576-.01-.2 0-.526.075-.801.376-.275.301-1.051 1.028-1.051 2.506 0 1.478 1.077 2.906 1.227 3.106.15.201 2.119 3.236 5.133 4.538.717.31 1.277.495 1.713.633.72.228 1.375.196 1.894.118.578-.087 1.78-.727 2.03-1.43.25-.702.25-1.303.175-1.43-.075-.125-.275-.2-.576-.35zM12.04 2C6.54 2 2.08 6.46 2.08 11.96c0 1.97.58 3.81 1.58 5.37L2 22l4.82-1.58c1.5 1 3.28 1.58 5.22 1.58 5.5 0 9.96-4.46 9.96-9.96C22 6.46 17.54 2 12.04 2z"/>
+          </svg>
+          <span>Message on WhatsApp</span>
         </a>
-        <a href="mailto:${CONTACT.email}?subject=${mailSubject}&body=${mailBody}" class="btn btn-outline btn-sm" style="border-color:var(--rose-gold);">
-          📧 Email Us
+        <a href="mailto:${CONTACT.email}?subject=${mailSubject}&body=${mailBody}" class="btn btn-outline btn-email">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          <span>Email Us</span>
         </a>
       </div>
     </div>
   `;
 }
+
+window.copySuccessTracking = function (code, btn) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).then(() => {
+      showToast('Tracking code copied to clipboard!', 'success');
+      if (btn) {
+        btn.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#27ae60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+        setTimeout(() => {
+          btn.innerHTML = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+        }, 2000);
+      }
+    }).catch(() => {
+      showToast('Tracking code: ' + code, 'info');
+    });
+  } else {
+    showToast('Tracking code: ' + code, 'info');
+  }
+};
 
 function renderErrorScreen(data, paymentRef) {
   const summaryContent = document.getElementById('summary-content');
