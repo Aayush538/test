@@ -55,6 +55,15 @@ const PRODUCTS = [
     images: ['images/Items/emotionalsupportplant1.jpeg', 'images/Items/emotionalsupportplant2.jpeg', 'images/Items/emotionalsupportplant3.jpeg', 'images/Items/emotionalsupportplantsingle1.jpeg'], // Example multiple images
   },
   {
+    id: 'letter-jar',
+    name: 'Handwritten Letter Jar',
+    description: 'Little personalized handwritten notes filled with love.',
+    priceAUD: 5.40,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: 'images/Items/bottle.jpeg',
+  },
+
+  {
     id: 'Mini photo-frame',
     name: 'Mini Keepsake Frame',
     description: 'A timeless frame to cherish your most beautiful moments.',
@@ -72,14 +81,7 @@ const PRODUCTS = [
     image: 'images/Items/Mug.png',
   },
 
-  {
-    id: 'letter-jar',
-    name: 'Handwritten Letter Jar',
-    description: 'Little personalized handwritten notes filled with love.',
-    priceAUD: 5.40,
-    priceNPR: 0,        // EDIT: Add real NPR price
-    image: 'images/Items/bottle.jpeg',
-  },
+
   {
     id: 'scented Candle',
     name: 'Aroma Scented Candle',
@@ -87,6 +89,60 @@ const PRODUCTS = [
     priceAUD: 5.40,
     priceNPR: 0,        // EDIT: Add real NPR price
     image: 'images/Items/Wax.jpeg',
+  },
+
+  {
+    id: 'Lucky Keyring',
+    name: 'Lucky Evil Eye Keyring',
+    description: 'Designed to attract good fortune and ward off negativity.',
+    priceAUD: 6.50,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: 'images/Items/evileyes.jpeg',
+  },
+  {
+    id: 'Single_Rose',
+    name: 'Single Rose',
+    description: 'A simple, elegant rose to express love and affection.',
+    priceAUD: 20,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: 'images/Items/Single Rose.jpeg',
+  },
+  {
+    id: 'Real_Bouquet',
+    name: 'Real Bouquet',
+    description: 'Fresh, beautiful flowers perfect for every special moment.',
+    priceAUD: 95,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: '',
+    images: ['images/Items/Realbouquet1.jpeg', 'images/Items/Realbouquet2.jpeg', 'images/Items/Realbouquet3.jpeg', 'images/Items/Realbouquet4.jpeg', 'images/Items/Realbouquet5.jpeg'],
+  },
+
+  {
+    id: 'Artificial_Bouquet',
+    name: 'Artificial Bouquet',
+    description: 'Beautiful everlasting flowers for a lasting impression.',
+    priceAUD: 45,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: '',
+    images: ['images/Items/Artificialbouquet3.jpeg', 'images/Items/Artificialbouquet2.jpeg', 'images/Items/Artificialbouquet1.jpeg', 'images/Items/Artificialbouquet4.jpeg', 'images/Items/Artificialbouquet5.jpeg'],
+  },
+  {
+    id: 'MiniCake',
+    name: 'Mini Cake',
+    description: 'Small in size, big on flavor! Our mini cake features soft, fluffy sponge, smooth creamy frosting, and a deliciously indulgent taste.',
+    priceAUD: 45,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: '',
+    images: ['images/Items/minicake2.jpeg', 'images/Items/minicake1.jpeg', 'images/Items/minicake3.jpeg'], // Example multiple images
+  },
+  {
+    id: 'Cake',
+    name: 'Cake',
+    description: 'Soft, moist, and freshly baked — customized with a message that makes it truly yours.',
+    priceAUD: 95,
+    priceNPR: 0,        // EDIT: Add real NPR price
+    image: '',
+    images: ['images/Items/cake5.jpeg', 'images/Items/cake2.jpeg', 'images/Items/cake3.jpeg', 'images/Items/cake4.jpeg', 'images/Items/cake1.jpeg'],
   },
 
   {
@@ -163,50 +219,8 @@ const PRODUCTS = [
     priceNPR: 0,        // EDIT: Add real NPR price
     image: 'images/Items/tshirt2.png',
   },
-  {
-    id: 'Lucky Keyring',
-    name: 'Lucky Evil Eye Keyring',
-    description: 'Designed to attract good fortune and ward off negativity.',
-    priceAUD: 6.50,
-    priceNPR: 0,        // EDIT: Add real NPR price
-    image: 'images/Items/evileyes.jpeg',
-  },
 
-  {
-    id: 'Cake',
-    name: 'Cake',
-    description: 'Soft, moist, and freshly baked — customized with a message that makes it truly yours.',
-    priceAUD: 95,
-    priceNPR: 0,        // EDIT: Add real NPR price
-    image: '',
-    images: ['images/Items/cake1.jpeg', 'images/Items/cake2.jpeg', 'images/Items/cake3.jpeg', 'images/Items/cake4.jpeg', 'images/Items/cake5.jpeg'],
-  },
-  {
-    id: 'Real_Bouquet',
-    name: 'Real Bouquet',
-    description: 'Fresh, beautiful flowers perfect for every special moment.',
-    priceAUD: 95,
-    priceNPR: 0,        // EDIT: Add real NPR price
-    image: '',
-    images: ['images/Items/Realbouquet5.jpeg', 'images/Items/Realbouquet2.jpeg', 'images/Items/Realbouquet3.jpeg', 'images/Items/Realbouquet4.jpeg', 'images/Items/Realbouquet1.jpeg'],
-  },
-  {
-    id: 'Artificial_Bouquet',
-    name: 'Artificial Bouquet',
-    description: 'Beautiful everlasting flowers for a lasting impression.',
-    priceAUD: 45,
-    priceNPR: 0,        // EDIT: Add real NPR price
-    image: '',
-    images: ['images/Items/Artificialbouquet1.jpeg', 'images/Items/Artificialbouquet2.jpeg', 'images/Items/Artificialbouquet3.jpeg', 'images/Items/Artificialbouquet4.jpeg', 'images/Items/Artificialbouquet5.jpeg'],
-  },
-  {
-    id: 'Single_Rose',
-    name: 'Single Rose',
-    description: 'A simple, elegant rose to express love and affection.',
-    priceAUD: 20,
-    priceNPR: 0,        // EDIT: Add real NPR price
-    image: 'images/Items/Single Rose.jpeg',
-  },
+
 ];
 // ──────────────────────────────────────────────────────────────
 // OCCASION SPECIALS — Edit prices/items when ready, image files
