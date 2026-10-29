@@ -22,10 +22,10 @@ const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbz08kasjwz0WtW63a
 // ──────────────────────────────────────────────────────────────
 const CONTACT = {
   whatsappNumber: '9779851414905',     // Your WhatsApp business number
-  email: 'giftbykrivya@gmail.com',     // EDIT: Your email address
+  email: 'giftsbykrivya@gmail.com',     // EDIT: Your email address
   instagram: 'giftbykrivya',           // EDIT: Your Instagram handle (without @)
   googleReviewUrl: 'https://g.page/r/YOUR_GOOGLE_REVIEW_LINK/review',  // EDIT: Your Google Review URL
-  franchiseEmail: 'giftbykrivya@gmail.com',    // Official franchise email
+  franchiseEmail: 'giftsbykrivya@gmail.com',    // Official franchise email
 };
 
 // ──────────────────────────────────────────────────────────────
@@ -36,6 +36,58 @@ const CONTACT = {
 //   and update the "image" field below with the filename.
 // ──────────────────────────────────────────────────────────────
 const PRODUCTS = [
+  {
+    id: 'Almonds',
+    name: 'Almonds',
+    subtitle: 'Cool Bro Crunch',
+    description: 'Premium fresh whole almonds packed in a personalized keepsake glass jar.',
+    priceAUD: 10,
+    originalPriceAUD: 15,
+    priceNPR: 0,
+    originalPriceNPR: 0,
+    image: 'images/Items/Almonds.jpeg',
+  },
+  {
+    id: 'Kaju',
+    name: 'Kaju',
+    subtitle: 'Premium & Fresh',
+    description: 'Whole, rich and buttery premium cashews packed fresh in a signature glass jar.',
+    priceAUD: 10,
+    originalPriceAUD: 15,
+    priceNPR: 0,
+    originalPriceNPR: 0,
+    image: 'images/Items/Kaju.jpeg',
+  },
+  {
+    id: 'Walnuts',
+    name: 'Walnuts',
+    subtitle: 'Smart Bro Starter',
+    description: 'Crisp, brain-boosting premium walnuts packed in a personalized keepsake glass jar.',
+    priceAUD: 10,
+    originalPriceAUD: 15,
+    priceNPR: 0,
+    originalPriceNPR: 0,
+    image: 'images/Items/Walnuts.jpeg',
+  },
+  {
+    id: 'Dhaka Topi',
+    name: 'Dhaka Topi',
+    subtitle: 'Handcrafted Heritage',
+    description: 'Traditional Nepali Dhaka Topi with vibrant geometric patterns, perfect for Bhai Tika.',
+    priceAUD: 10,
+    priceNPR: 0,
+    image: 'images/Items/Dhaka Topi.jpeg',
+  },
+  {
+    id: 'Makhamali Mala & Saptrangi Tika',
+    name: 'Makhamali Mala & Saptrangi Tika',
+    subtitle: 'Bhai Tika Set',
+    description: 'Traditional everlasting purple Makhamali floral garland paired with auspicious seven-colour Bhai Tika.',
+    priceAUD: 6,
+    priceNPR: 0,
+    image: 'images/Items/Makhamali Mala & Saptrangi Tika.jpeg',
+  },
+
   {
     id: 'Plushies',
     name: 'Plushies',
@@ -232,6 +284,25 @@ const PRODUCTS = [
 // ──────────────────────────────────────────────────────────────
 const OCCASION_SPECIALS = [
   {
+    id: 'tihar-special-package',
+    name: 'Tihar Special Package',
+    badgeText: 'Tihar Special',
+    hasIcon: true,
+    priceAUD: 135,
+    priceNPR: 0,
+    image: 'images/Items/Tihar Special Package.jpeg',
+    teaser: 'Celebrate Bhai Tika & Tihar with our festive hamper curated with dry fruits, chocolates, traditional essentials & keepsakes.',
+    description: 'A thoughtfully curated festive hamper featuring 3 jars of premium nuts, Ferrero Collection chocolates, Cadbury Dairy Milk, traditional Saptarangi Tika, purple floral Mala, and a keepsake keyring in a luxury gift box.',
+    packageItems: [
+      { id: 'tsp-nuts', name: 'Nuts (3 Jars)', icon: '🥜', description: '3 curated jars of premium mixed nuts (Almonds, Cashews, Walnuts)' },
+      { id: 'tsp-keyring', name: 'Keyring', icon: '🧿', description: 'Cute keepsake plush & charm keyring' },
+      { id: 'tsp-ferrero', name: 'Ferrero Collection', icon: '✨', description: 'Assorted luxury chocolates (Ferrero Rocher, Raffaello & Rondnoir)' },
+      { id: 'tsp-tika', name: 'Tika', icon: '🪔', description: 'Traditional Saptarangi seven-colour Bhai Tika' },
+      { id: 'tsp-mala', name: 'Mala', icon: '🌸', description: 'Traditional Makhamali / Sayapatri purple floral garland' },
+      { id: 'tsp-dairymilk', name: 'Dairy Milk', icon: '🍫', description: 'Cadbury Dairy Milk Roast Almond chocolate bar' },
+    ]
+  },
+  {
     id: 'her-care-package',
     name: 'Her Care Package',
     badgeText: 'Special Offer',
@@ -242,14 +313,14 @@ const OCCASION_SPECIALS = [
     teaser: 'A delightful care hamper curated with warmth, self-care, and adorable Sanrio-themed keepsakes.',
     description: 'Includes Kuromi heat up wheat bag, cute pink teddy bear, strawberry face mask, sweet hand cream, nourishing lip oil, lip care, Hello Kitty fuzzy socks, and a My Melody plush pouch bag.',
     packageItems: [
-      { id: 'hcp-wheatbag', name: 'Kuromi Heat Up Wheat Bag', icon: '-', description: 'Plush heatable wheat bag for cozy warmth' },
-      { id: 'hcp-teddy', name: 'Plush Pink Teddy Bear', icon: '-', description: 'Cute, fluffy and cuddly companion' },
-      { id: 'hcp-facemask', name: 'Strawberry Face Sheet Mask', icon: '-', description: 'Hydrating and revitalizing skin pamper' },
-      { id: 'hcp-handcream', name: 'Moisturizing Hand Cream', icon: '-', description: 'Silky smooth nourishing hand cream' },
-      { id: 'hcp-lipoil', name: 'Glossy Hydrating Lip Oil', icon: '-', description: 'Rich nourishing moisture' },
-      { id: 'hcp-lipcare', name: 'Soothing Lip Balm', icon: '-', description: 'Daily protective lip care' },
-      { id: 'hcp-socks', name: 'Hello Kitty Fuzzy Warm Socks', icon: '-', description: 'Ultra-soft cozy winter socks' },
-      { id: 'hcp-pouch', name: 'My Melody Plush Pouch Bag', icon: '-', description: 'Soft pink plush essentials bag with bow' },
+      { id: 'hcp-wheatbag', name: 'Kuromi Heat Up Wheat Bag', icon: '🌾', description: 'Plush heatable wheat bag for cozy warmth' },
+      { id: 'hcp-teddy', name: 'Plush Pink Teddy Bear', icon: '🧸', description: 'Cute, fluffy and cuddly companion' },
+      { id: 'hcp-facemask', name: 'Strawberry Face Sheet Mask', icon: '🍓', description: 'Hydrating and revitalizing skin pamper' },
+      { id: 'hcp-handcream', name: 'Moisturizing Hand Cream', icon: '🧴', description: 'Silky smooth nourishing hand cream' },
+      { id: 'hcp-lipoil', name: 'Glossy Hydrating Lip Oil', icon: '✨', description: 'Rich nourishing moisture' },
+      { id: 'hcp-lipcare', name: 'Soothing Lip Balm', icon: '💄', description: 'Daily protective lip care' },
+      { id: 'hcp-socks', name: 'Hello Kitty Fuzzy Warm Socks', icon: '🧦', description: 'Ultra-soft cozy winter socks' },
+      { id: 'hcp-pouch', name: 'My Melody Plush Pouch Bag', icon: '👛', description: 'Soft pink plush essentials bag with bow' },
     ]
   }
 ];
@@ -346,6 +417,7 @@ const PAYMENT_IMAGES = {
 // OCCASIONS — Edit the dropdown options for order form
 // ──────────────────────────────────────────────────────────────
 const OCCASIONS = [
+  'Tihar / Bhai Tika',
   'Birthday',
   'Anniversary',
   'Valentines Day',
@@ -526,7 +598,7 @@ function renderProducts() {
               ${imagesArray.map((img, idx) => `<img src="${escapeHtml(img)}" alt="${escapeHtml(safeName)}" loading="lazy" decoding="async" onclick="openProductLightbox('${escapeHtml(p.id)}', ${idx})">`).join('')}
             </div>
             <button class="product-image-nav next" onclick="scrollProductImage(event, '${escapeHtml(p.id)}', 1)">&#10095;</button>
-            <span class="product-zoom-hint">🔍 Tap to view</span>
+            <span class="product-zoom-hint"> Tap to view</span>
           </div>
         `;
       } else {
@@ -535,13 +607,19 @@ function renderProducts() {
           <div class="product-card-img-wrap" onclick="openProductLightbox('${escapeHtml(p.id)}', 0)">
             <img src="${escapeHtml(safeImage)}" alt="${escapeHtml(safeName)}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <span class="placeholder-label" style="display:none;">📷 ${escapeHtml(safeImage.split('/').pop())}<br>Drop your photo here</span>
-            <span class="product-zoom-hint">🔍 Tap to view</span>
+            <span class="product-zoom-hint">Tap to view</span>
           </div>
         `;
       }
 
+      const hasOffer = p.originalPriceAUD && p.originalPriceAUD > p.priceAUD;
+      const priceHtml = hasOffer
+        ? `<span class="price-original">${formatPrice(p.originalPriceAUD, p.originalPriceNPR || 0)}</span> <span class="price-current">${formatPrice(p.priceAUD, p.priceNPR || 0)}</span>`
+        : formatPrice(p.priceAUD, p.priceNPR);
+
       return `
         <article class="product-card fade-in" data-product-id="${escapeHtml(p.id)}" onclick="handleProductCardClick(event, '${escapeHtml(p.id)}')">
+          ${hasOffer ? '<span class="product-badge-sale">Special Offer</span>' : ''}
           ${imageHtml}
           <div class="product-card-body">
             <div>
@@ -550,8 +628,8 @@ function renderProducts() {
               <p class="product-card-desc">${escapeHtml(safeDescription)}</p>
             </div>
             <div>
-              <div class="product-card-price" data-aud="${p.priceAUD}" data-npr="${p.priceNPR}">
-                ${formatPrice(p.priceAUD, p.priceNPR)}
+              <div class="product-card-price" data-aud="${p.priceAUD}" data-npr="${p.priceNPR}" data-orig-aud="${p.originalPriceAUD || ''}" data-orig-npr="${p.originalPriceNPR || ''}">
+                ${priceHtml}
               </div>
               <div class="product-card-actions">
                 <button class="btn btn-primary btn-sm" onclick="addToCart('${escapeHtml(p.id)}')">
@@ -850,11 +928,25 @@ function setCurrency(currency) {
   updateConditionalRequiredFields();
 
   // Update all prices on the page
-  document.querySelectorAll('.product-card-price, .occasion-card-price-tag').forEach(el => {
+  document.querySelectorAll('.occasion-card-price-tag').forEach(el => {
     const aud = parseFloat(el.dataset.aud);
     const npr = parseFloat(el.dataset.npr);
     if (!isNaN(aud)) {
       el.textContent = formatPrice(aud, npr);
+    }
+  });
+
+  document.querySelectorAll('.product-card-price').forEach(el => {
+    const aud = parseFloat(el.dataset.aud);
+    const npr = parseFloat(el.dataset.npr);
+    const origAud = parseFloat(el.dataset.origAud);
+    const origNpr = parseFloat(el.dataset.origNpr);
+    if (!isNaN(aud)) {
+      if (!isNaN(origAud) && origAud > aud) {
+        el.innerHTML = `<span class="price-original">${formatPrice(origAud, origNpr || 0)}</span> <span class="price-current">${formatPrice(aud, npr)}</span>`;
+      } else {
+        el.textContent = formatPrice(aud, npr);
+      }
     }
   });
 
@@ -2022,7 +2114,7 @@ function refreshOrderSummary(keepScroll = true) {
           <img src="${PAYMENT_IMAGES.nabilBankQR}" alt="Nabil Bank QR" class="luxury-qr-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
           <span class="placeholder-label" style="display:none;">📷 NabilBank.png<br>Place your Nabil Bank QR image here</span>
           <div class="luxury-qr-zoom-hint">
-            <span>🔍</span> Tap to enlarge
+            <span></span> Tap to enlarge
           </div>
         </div>
       </div>
