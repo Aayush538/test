@@ -502,12 +502,17 @@ h5 {
   position: relative;
 }
 
+.occasion-specials .container {
+  max-width: 1260px;
+  width: 92%;
+}
+
 .occasion-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 420px));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   justify-content: center;
-  gap: 28px;
-  max-width: 1140px;
+  gap: 22px;
+  max-width: 1240px;
   margin: 0 auto;
 }
 
@@ -540,10 +545,38 @@ h5 {
   margin: 0 auto;
 }
 
-@media (max-width: 900px) {
-  .occasion-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+@media (max-width: 860px) {
+  .occasion-specials .container {
+  max-width: 1260px;
+  width: 92%;
+}
+
+.occasion-grid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
     gap: 20px;
+  }
+}
+
+@media (max-width: 1050px) and (min-width: 861px) {
+  .occasion-grid {
+    gap: 16px;
+  }
+  .occasion-card-body {
+    padding: 16px 14px 18px;
+  }
+  .occasion-card-name {
+    font-size: 1.15rem;
+  }
+  .occasion-card-desc {
+    font-size: 0.82rem;
+  }
+  .occasion-card-actions {
+    gap: 6px;
+  }
+  .occasion-card-actions .btn {
+    padding: 9px 4px;
+    font-size: 0.78rem;
   }
 }
 
@@ -2607,7 +2640,12 @@ h5 {
   }
 
   /* ── Occasion Specials — full-width responsive layout for all mobile screens ── */
-  .occasion-grid {
+  .occasion-specials .container {
+  max-width: 1260px;
+  width: 92%;
+}
+
+.occasion-grid {
     grid-template-columns: 1fr;
     max-width: 500px;
     width: 100%;

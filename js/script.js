@@ -83,7 +83,7 @@ const PRODUCTS = [
     name: 'Makhamali Mala & Saptrangi Tika',
     subtitle: 'Bhai Tika Set',
     description: 'Traditional everlasting purple Makhamali floral garland paired with auspicious seven-colour Bhai Tika.',
-    priceAUD: 6,
+    priceAUD: 8,
     priceNPR: 0,
     image: 'images/Items/Makhamali Mala & Saptrangi Tika.jpeg',
   },
@@ -300,6 +300,25 @@ const OCCASION_SPECIALS = [
       { id: 'tsp-tika', name: 'Tika', icon: '🪔', description: 'Traditional Saptarangi seven-colour Bhai Tika' },
       { id: 'tsp-mala', name: 'Mala', icon: '🌸', description: 'Traditional Makhamali / Sayapatri purple floral garland' },
       { id: 'tsp-dairymilk', name: 'Dairy Milk', icon: '🍫', description: 'Cadbury Dairy Milk Roast Almond chocolate bar' },
+    ]
+  },
+  {
+    id: 'tihar-special-package-2',
+    name: 'Tihar Special Package',
+    badgeText: 'Tihar Special',
+    hasIcon: true,
+    priceAUD: 60,
+    priceNPR: 0,
+    image: 'images/Items/TIhar Special Package 2.jpeg',
+    teaser: 'Celebrate Bhai Tika & Tihar with our festive hamper featuring Dhaka Topi, 3 jars of dry fruits, mini photo frame & Mala Tika.',
+    description: 'A special festive Bhai Tika gift hamper featuring a traditional Dhaka Topi, 3 curated jars of premium dry fruits (Walnuts, Cashews, Almonds), personalized mini frame including photo print, and traditional Makhamali Mala & Saptarangi Tika.',
+    packageItems: [
+      { id: 'tsp2-topi', name: 'Dhaka Topi', icon: '🧢', description: 'Traditional Nepali Dhaka Topi with vibrant geometric patterns' },
+      { id: 'tsp2-walnuts', name: 'Walnuts', icon: '🥜', description: 'Crisp, premium walnuts in signature keepsake jar' },
+      { id: 'tsp2-cashew', name: 'Cashew', icon: '🥜', description: 'Rich, whole premium cashews in signature keepsake jar' },
+      { id: 'tsp2-almond', name: 'Almond', icon: '🥜', description: 'Fresh, whole premium almonds in signature keepsake jar' },
+      { id: 'tsp2-frame', name: 'Mini Frame (includes photo)', icon: '🖼️', description: 'Personalized mini keepsake frame with photo included' },
+      { id: 'tsp2-mala-tika', name: 'Mala & Tika', icon: '🌸', description: 'Traditional Makhamali floral garland paired with auspicious Saptarangi Tika' },
     ]
   },
   {
